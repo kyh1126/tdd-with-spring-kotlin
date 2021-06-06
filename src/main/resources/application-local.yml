@@ -28,8 +28,8 @@ spring:
     redis:
       time-to-live: 60
 
-#logging:                         # 잠시 꺼두려고 한다.
-#  level:
+logging:
+#  level:                         # 잠시 꺼두려고 한다.
 #    # org.hibernate.SQL: debug
 #    org.hibernate.type.descriptor.sql: trace
-#  config: classpath:logback-local.xml
+  config: classpath:logback-local.xml

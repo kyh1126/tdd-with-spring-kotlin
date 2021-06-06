@@ -5,10 +5,10 @@
             <pattern>%d{yy-MM-dd HH:mm:ss} %highlight(%-5level) %cyan(%-60msg) -- %yellow(%logger{15}.%M\(%L\)) %magenta([%thread]) %n</pattern>
         </encoder>
     </appender>
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/demo.log</file>
         <encoder>
-            <pattern>%d{MM-dd HH:mm:ss} %5p - %-60msg -- %logger{15}\(%L\) %M[%thread] %n</pattern>
+            <pattern>%d{MM-dd HH:mm:ss} %5p - %-60msg &#45;&#45; %logger{15}\(%L\) %M[%thread] %n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/demo.%d{yyyyMMdd}.log.%i</fileNamePattern>
@@ -17,9 +17,9 @@
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-    </appender>
+    </appender>-->
 
-    <appender name="error_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--<appender name="error_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/error.log</file>
         <encoder>
             <pattern>%m%n</pattern>
@@ -28,15 +28,15 @@
             <fileNamePattern>logs/error.%d{yyyyMMdd}.log</fileNamePattern>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
-    </appender>
+    </appender>-->
 
-    <logger name="error_log" level="DEBUG" additivity="false">
+    <!--<logger name="error_log" level="DEBUG" additivity="false">
         <appender-ref ref="error_log"/>
-    </logger>
+    </logger>-->
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
+        <!--<appender-ref ref="FILE"/>-->
     </root>
 
 </configuration>
