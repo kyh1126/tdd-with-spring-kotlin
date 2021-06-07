@@ -2,16 +2,23 @@ package me.jenny.demo.config
 
 import me.jenny.demo.util.Log
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.cache.annotation.EnableCaching
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.redis.connection.RedisConnectionFactory
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
+import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
+import org.springframework.data.redis.serializer.GenericToStringSerializer
 import redis.embedded.RedisServer
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
 @Configuration
-@EnableCaching
-class RedisConfig(@Value("\${spring.redis.port:6379}") private val port: Int) {
-    companion object : Log
+@EnableRedisRepositories
+class RedisConfig(
+        @Value("\${spring.redis.host}") private val host: String,
+        @Value("\${spring.redis.port:6379}") private val port: Int
+) {
 
     lateinit var redisServer: RedisServer
 
@@ -30,5 +37,16 @@ class RedisConfig(@Value("\${spring.redis.port:6379}") private val port: Int) {
         redisServer.stop()
     }
 
-    // TODO: 작성중... logback 색깔 설정이 먹지 않는군.
+    @Bean
+    fun redisConnectionFactory(): RedisConnectionFactory = LettuceConnectionFactory(host, port)
+
+    @Bean
+    fun stringRedisTemplate(redisConnectionFactory: RedisConnectionFactory): RedisTemplate<String, Any> {
+        return RedisTemplate<String, Any>().apply {
+            setConnectionFactory(redisConnectionFactory)
+            valueSerializer = GenericToStringSerializer(Any::class.java)
+        }
+    }
+
+    companion object : Log
 }
