@@ -23,7 +23,6 @@ import java.util.*
 @SpringBootTest(classes = [GoalService::class])
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @ActiveProfiles("local")
-//@AutoConfigureMockMvc
 @EnableAutoConfiguration
 internal class GoalServiceTest(private val goalService: GoalService) {
     @MockBean
