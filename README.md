@@ -73,3 +73,15 @@
 
 - 목표를 삭제한다.
 - 히스토리를 남긴다.
+
+
+## 6. PUT /goals/{id}/complete
+
+- 오늘의 목표 Complete
+- 히스토리를 남긴다.
+
+
+## 7. PUT /goals/{id}/pending
+
+- 오늘의 목표 Pending
+- 히스토리를 남긴다.
