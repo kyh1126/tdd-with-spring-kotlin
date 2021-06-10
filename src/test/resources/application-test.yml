@@ -1,0 +1,16 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true  # 추후 localstack 사용 시 S3 클라이언트 정상 동작하도록 Bean 오버라이딩 활성화
+  datasource:
+    url: jdbc:tc:mysql:///demo
+    username: root
+    password:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate.ddl-auto: create-drop
+  redis:
+    host: localhost
+    port: 6379
+  cache:
+    redis:
+      time-to-live: 10

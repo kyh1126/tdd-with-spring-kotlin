@@ -16,13 +16,19 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestConstructor
+import org.testcontainers.containers.MySQLContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDate
 import java.util.*
 
+@Testcontainers
+@ActiveProfiles("test")
 @SpringBootTest(classes = [GoalService::class])
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-@ActiveProfiles("local")
 @EnableAutoConfiguration
 internal class GoalServiceTest(private val goalService: GoalService) {
     @MockBean
@@ -58,5 +64,20 @@ internal class GoalServiceTest(private val goalService: GoalService) {
 
         verify(goalRespository, times(1)).save(mockGoal)
         assertEquals(mockGoal, actualGoal)
+    }
+
+
+    companion object {
+        @Container
+        private val mySqlContainer = MySQLContainer<Nothing>("mysql:latest")
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun registerDynamicProperties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.url") { mySqlContainer.jdbcUrl }
+            registry.add("spring.datasource.username") { mySqlContainer.username }
+            registry.add("spring.datasource.password") { mySqlContainer.password }
+            registry.add("spring.datasource.driver-class-name") { mySqlContainer.driverClassName }
+        }
     }
 }
