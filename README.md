@@ -23,7 +23,7 @@
 
 # 필요한 API 를 정의해보자
 
-## 1. POST /goals/add
+## 1. POST /goals
 
 - 목표를 저장한다.
     - 주제명
