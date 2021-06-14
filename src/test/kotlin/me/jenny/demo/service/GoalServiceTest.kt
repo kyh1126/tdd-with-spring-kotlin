@@ -3,6 +3,7 @@ package me.jenny.demo.service
 import me.jenny.demo.domain.DayOfWeekChoice
 import me.jenny.demo.domain.goal.Goal
 import me.jenny.demo.domain.goal.GoalRepository
+import me.jenny.demo.service.dto.GoalRequest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -38,7 +39,7 @@ internal class GoalServiceTest(private val goalService: GoalService) {
     @DisplayName("목표 저장")
     fun `목표를 저장한다`() {
         // given
-        val mockGoal = Goal(
+        val mockGoal = GoalRequest(
             title = "TDD 프로젝트 완성",
             startDt = LocalDate.of(2021, 6, 6),
             totalGoal = 100,
@@ -49,9 +50,8 @@ internal class GoalServiceTest(private val goalService: GoalService) {
                 DayOfWeekChoice.WEDNESDAY,
                 DayOfWeekChoice.THURSDAY,
                 DayOfWeekChoice.FRIDAY
-            ),
-            etc = null
-        )
+            )
+        ).toEntity()
 
         given(goalRespository.save(any(Goal::class.java))).willReturn(mockGoal)
         given(goalRespository.findById(anyLong())).willReturn(Optional.of(mockGoal))
