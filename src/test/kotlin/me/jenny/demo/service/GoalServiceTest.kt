@@ -39,7 +39,7 @@ internal class GoalServiceTest(private val goalService: GoalService) {
     @DisplayName("목표 저장")
     fun `목표를 저장한다`() {
         // given
-        val mockGoal = GoalRequest(
+        val goalRequest = GoalRequest(
             title = "TDD 프로젝트 완성",
             startDt = LocalDate.of(2021, 6, 6),
             totalGoal = 100,
@@ -51,13 +51,14 @@ internal class GoalServiceTest(private val goalService: GoalService) {
                 DayOfWeekChoice.THURSDAY,
                 DayOfWeekChoice.FRIDAY
             )
-        ).toEntity()
+        )
+        val mockGoal = goalRequest.toEntity()
 
         given(goalRespository.save(any(Goal::class.java))).willReturn(mockGoal)
         given(goalRespository.findById(anyLong())).willReturn(Optional.of(mockGoal))
 
         // when
-        goalService.saveGoal(mockGoal)
+        goalService.createGoal(goalRequest)
 
         // then
         val actualGoal = goalRespository.findByIdOrNull(mockGoal.id)
