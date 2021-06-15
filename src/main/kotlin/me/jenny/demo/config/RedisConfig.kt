@@ -4,6 +4,7 @@ import me.jenny.demo.util.Log
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
@@ -40,8 +41,12 @@ class RedisConfig(
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory = LettuceConnectionFactory(host, port)
 
+    /**
+     * stringRedisTemplate 로는 만들 수 없다. key 만 String 인 RedisTemplate bean.
+     * @see org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration#stringRedisTemplate(RedisConnectionFactory)
+     */
     @Bean
-    fun stringRedisTemplate(redisConnectionFactory: RedisConnectionFactory): RedisTemplate<String, Any> {
+    fun redisTemplate(redisConnectionFactory: RedisConnectionFactory): RedisTemplate<String, Any> {
         return RedisTemplate<String, Any>().apply {
             setConnectionFactory(redisConnectionFactory)
             valueSerializer = GenericToStringSerializer(Any::class.java)
