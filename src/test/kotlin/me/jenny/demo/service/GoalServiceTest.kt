@@ -1,10 +1,14 @@
 package me.jenny.demo.service
 
 import me.jenny.demo.domain.DayOfWeekChoice
+import me.jenny.demo.domain.Progress
 import me.jenny.demo.domain.goal.Goal
+import me.jenny.demo.domain.goal.GoalHistory
+import me.jenny.demo.domain.goal.GoalHistoryRepository
 import me.jenny.demo.domain.goal.GoalRepository
 import me.jenny.demo.service.dto.GoalRequest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyLong
@@ -35,6 +39,9 @@ internal class GoalServiceTest(private val goalService: GoalService) {
     @MockBean
     lateinit var goalRespository: GoalRepository
 
+    @MockBean
+    lateinit var goalHistoryRepository: GoalHistoryRepository
+
     @Test
     @DisplayName("목표 저장")
     fun `목표를 저장한다`() {
@@ -44,13 +51,7 @@ internal class GoalServiceTest(private val goalService: GoalService) {
             startDt = LocalDate.of(2021, 6, 6),
             totalGoal = 100,
             unitGoal = 5,
-            attendDates = setOf(
-                DayOfWeekChoice.MONDAY,
-                DayOfWeekChoice.TUESDAY,
-                DayOfWeekChoice.WEDNESDAY,
-                DayOfWeekChoice.THURSDAY,
-                DayOfWeekChoice.FRIDAY
-            )
+            attendDates = weekdays()
         )
         val mockGoal = goalRequest.toEntity()
 
@@ -63,9 +64,23 @@ internal class GoalServiceTest(private val goalService: GoalService) {
         // then
         val actualGoal = goalRespository.findByIdOrNull(mockGoal.id)
 
+        assertNotNull(actualGoal)
+        actualGoal!!
+
         verify(goalRespository, times(1)).save(mockGoal)
+        verify(goalHistoryRepository, times(1)).save(any(GoalHistory::class.java))
         assertEquals(mockGoal, actualGoal)
+        assertEquals(actualGoal.status, Progress.IN_PROGRESS)
+        assertEquals(actualGoal.attendDates, weekdays())
     }
+
+    private fun weekdays() = setOf(
+        DayOfWeekChoice.MONDAY,
+        DayOfWeekChoice.TUESDAY,
+        DayOfWeekChoice.WEDNESDAY,
+        DayOfWeekChoice.THURSDAY,
+        DayOfWeekChoice.FRIDAY
+    )
 
 
     companion object {
