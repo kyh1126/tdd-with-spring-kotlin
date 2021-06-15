@@ -60,6 +60,7 @@ internal class GoalControllerTest(
 
         // then
         val savedGoal = goalRespository.findByTitle(dto.title) ?: throw NoSuchElementException()
+        // TODO: Customizing exception
         // { GoalNotFoundException() }
         assertNotNull(savedGoal)
         assertEquals(dto.title, savedGoal.title)
