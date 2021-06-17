@@ -29,20 +29,4 @@ class WebMvcConfiguration : WebMvcConfigurer {
             }
         }
     }
-
-    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        // for swagger -> 스웨거 3.0 부터 설정 방식 및 resource url 이 변경되었다.
-//        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/")
-//        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/")
-        registry.addResourceHandler("/swagger-ui/**").addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
-    }
-
-    override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600)
-    }
 }
