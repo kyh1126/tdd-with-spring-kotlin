@@ -15,10 +15,9 @@ class GoalService(
     @Transactional
     fun createGoal(goalRequest: GoalRequest) {
         val goal = goalRequest.toEntity()
-        goalRepository.save(goal)
+        val goalHistory = GoalHistory(history = "목표 생성")
 
-        val goalHistory = GoalHistory(goal.id, "목표 생성")
-        goalHistoryRepository.save(goalHistory)
         goal.addHistory(goalHistory)
+        goalRepository.save(goal)
     }
 }

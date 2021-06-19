@@ -24,8 +24,7 @@ class Goal(
 
     var etc: String? = null,
 
-    @OneToMany(cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "goal_id")
+    @OneToMany(mappedBy = "goal", cascade = [CascadeType.PERSIST])
     val histories: MutableList<GoalHistory> = mutableListOf()
 
 ) : AuditableEntity() {
@@ -42,5 +41,8 @@ class Goal(
     override fun equals(other: Any?) = stem.eq(other)
     override fun hashCode() = stem.hc()
 
-    fun addHistory(history: GoalHistory) = histories.add(history)
+    fun addHistory(history: GoalHistory) {
+        histories.add(history)
+        history.goal = this
+    }
 }
