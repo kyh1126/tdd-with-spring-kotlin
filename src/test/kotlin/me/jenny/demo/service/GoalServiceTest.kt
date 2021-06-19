@@ -1,6 +1,6 @@
 package me.jenny.demo.service
 
-import me.jenny.demo.domain.DayOfWeekChoice
+import me.jenny.demo.domain.DayOfWeekChoice.*
 import me.jenny.demo.domain.Progress
 import me.jenny.demo.domain.goal.Goal
 import me.jenny.demo.domain.goal.GoalHistory
@@ -42,6 +42,8 @@ internal class GoalServiceTest(private val goalService: GoalService) {
     @MockBean
     lateinit var goalHistoryRepository: GoalHistoryRepository
 
+    private val weekdays = setOf(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY)
+
     @Test
     @DisplayName("목표 저장")
     fun `목표를 저장한다`() {
@@ -51,7 +53,7 @@ internal class GoalServiceTest(private val goalService: GoalService) {
             startDt = LocalDate.of(2021, 6, 6),
             totalGoal = 100,
             unitGoal = 5,
-            attendDates = weekdays()
+            attendDates = weekdays
         )
         val mockGoal = goalRequest.toEntity()
 
@@ -71,16 +73,8 @@ internal class GoalServiceTest(private val goalService: GoalService) {
         verify(goalHistoryRepository, times(1)).save(any(GoalHistory::class.java))
         assertEquals(mockGoal, actualGoal)
         assertEquals(actualGoal.status, Progress.IN_PROGRESS)
-        assertEquals(actualGoal.attendDates, weekdays())
+        assertEquals(actualGoal.attendDates, weekdays)
     }
-
-    private fun weekdays() = setOf(
-        DayOfWeekChoice.MONDAY,
-        DayOfWeekChoice.TUESDAY,
-        DayOfWeekChoice.WEDNESDAY,
-        DayOfWeekChoice.THURSDAY,
-        DayOfWeekChoice.FRIDAY
-    )
 
 
     companion object {
